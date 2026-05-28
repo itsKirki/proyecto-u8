@@ -5,7 +5,15 @@ public class Cliente extends Persona {
     private String rfcFacturacion;
     private Date fechaRegistro;
     private String tipoCliente;
-    
+
+    public Cliente() {
+        super();
+        this.puntosFidelidad = 0;
+        this.rfcFacturacion = "RFC000000000";
+        this.fechaRegistro = new Date();
+        this.tipoCliente = "Default";
+    }
+
     public Cliente(int id, String nombre, int telefono, String email, int puntosFidelidad, String rfcFacturacion, Date fechaRegistro, String tipoCliente) {
         super(id, nombre, telefono, email);
         this.puntosFidelidad = puntosFidelidad;
@@ -15,15 +23,15 @@ public class Cliente extends Persona {
     }
 
     public int getPuntosFidelidad() {
-        return puntosFidelidad;
+        return this.puntosFidelidad;
     }
 
     public void setPuntosFidelidad(int puntosFidelidad) {
-        this.puntosFidelidad = puntosFidelidad;
+        this.puntosFidelidad = puntosFidelidad >= 0 ? puntosFidelidad : 0;
     }
 
     public String getRfcFacturacion() {
-        return rfcFacturacion;
+        return this.rfcFacturacion;
     }
 
     public void setRfcFacturacion(String rfcFacturacion) {
@@ -31,7 +39,7 @@ public class Cliente extends Persona {
     }
 
     public Date getFechaRegistro() {
-        return fechaRegistro;
+        return this.fechaRegistro;
     }
 
     public void setFechaRegistro(Date fechaRegistro) {
@@ -39,7 +47,7 @@ public class Cliente extends Persona {
     }
 
     public String getTipoCliente() {
-        return tipoCliente;
+        return this.tipoCliente;
     }
 
     public void setTipoCliente(String tipoCliente) {

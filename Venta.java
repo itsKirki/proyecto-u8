@@ -7,6 +7,13 @@ public class Venta {
     private String metodoPago;
     private Producto[] productos;
     
+    public Venta() {
+        this.folioTicket = 0;
+        this.fechaHora = new Date();
+        this.total = 0.0;
+        this.metodoPago = "Default";
+        this.productos = new Producto[0];
+    }
 
     public Venta(int folioTicket, Date fechaHora, double total, String metodoPago, Producto[] productos) {
         this.folioTicket = folioTicket;
@@ -21,7 +28,7 @@ public class Venta {
     }
 
     public void setFolioTicket(int folioTicket) {
-        this.folioTicket = folioTicket;
+        this.folioTicket = folioTicket >= 0 ? folioTicket : 0;
     }
 
     public Date getFechaHora() {
@@ -37,7 +44,7 @@ public class Venta {
     }
 
     public void setTotal(double total) {
-        this.total = total;
+        this.total = total >= 0 ? total : 0;
     }
 
     public String getMetodoPago() {

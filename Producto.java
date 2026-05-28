@@ -2,8 +2,17 @@ public class Producto {
     private String codigoBarras;
     private String nombre;
     private String descripcion;
+    private String categoria;
     private double precio;  
     private int stock;
+
+    public Producto() {
+        this.codigoBarras = "0000000000000";
+        this.nombre = "Default";
+        this.descripcion = "Default description";
+        this.precio = 0.0;
+        this.stock = 0;
+    }
 
     public Producto(String codigoBarras, String nombre, String descripcion, double precio, int stock) {
         this.codigoBarras = codigoBarras;
@@ -37,12 +46,20 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
     public double getPrecio() {
         return precio;
     }
 
     public void setPrecio(double precio) {
-        this.precio = precio;
+        this.precio = precio >= 0 ? precio : 0;
     }
 
     public int getStock() {
@@ -50,6 +67,6 @@ public class Producto {
     }
 
     public void setStock(int stock) {
-        this.stock = stock;
+        this.stock = stock >= 0 ? stock : 0;
     }
 }

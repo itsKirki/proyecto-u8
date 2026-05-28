@@ -4,6 +4,14 @@ public class Empleado extends Persona{
     private double salario;
     private String puesto;
 
+    public Empleado() {
+        super();
+        this.rfc = "RFC000000000";
+        this.turno = "Default";
+        this.salario = 0.0;
+        this.puesto = "Default";
+    }
+
     public Empleado(int ID, String nombre, int telefono, String email, String rfc, String turno, double salario, String puesto) {
         super(ID, nombre, telefono, email);
         this.rfc = rfc;
@@ -13,7 +21,7 @@ public class Empleado extends Persona{
     }   
 
     public String getRfc() {
-        return rfc;
+        return this.rfc;
     }
 
     public void setRfc(String rfc) {
@@ -21,7 +29,7 @@ public class Empleado extends Persona{
     }
 
     public String getTurno() {
-        return turno;
+        return this.turno;
     }
 
     public void setTurno(String turno) {
@@ -29,15 +37,15 @@ public class Empleado extends Persona{
     }
 
     public double getSalario() {
-        return salario;
+        return this.salario;
     }
 
     public void setSalario(double salario) {
-        this.salario = salario;
+        this.salario = salario >= 0 ? salario : 0;
     }
 
     public String getPuesto() {
-        return puesto;
+        return this.puesto;
     }
 
     public void setPuesto(String puesto) {

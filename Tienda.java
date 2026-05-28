@@ -1,9 +1,14 @@
 
 public class Tienda {
-
     private String nombre;
     private String sucursal;
     private String direccion;
+
+    public Tienda() {
+        this.nombre = "Default";
+        this.sucursal = "Default";
+        this.direccion = "Default address";
+    }
 
     public Tienda(String nombre, String sucursal, String direccion) {
         this.nombre = nombre;
