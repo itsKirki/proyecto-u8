@@ -34,11 +34,9 @@ public void leerYMostrarTxt(String rutaArchivo) {
             reader = new BufferedReader(new FileReader(rutaArchivo));
             String linea;
             
-            System.out.println("--- Contenido del archivo ---");
             while ((linea = reader.readLine()) != null) {
                 System.out.println(linea);
             }
-            System.out.println("-----------------------------");
             
         } catch (IOException e) {
             System.err.println("Ocurrió un error al leer: " + e.getMessage());
