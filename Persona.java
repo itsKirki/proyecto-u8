@@ -4,16 +4,17 @@
         protected String nombre;
         protected int telefono;
         protected String email;
+        private static int tmp = 1000;
 
         public Persona() {
-            this.id = 0;
+            this.id = tmp++;
             this.nombre = "Default";
             this.telefono = 0;
             this.email = "default@example.com";
         }
 
         public Persona(int id, String nombre, int telefono, String email) {
-            this.id = id;
+            this.id = tmp++;
             this.nombre = nombre;
             this.telefono = telefono;
             this.email = email;

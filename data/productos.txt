@@ -1,0 +1,2 @@
+100      Takis fuego          Producto de barcel             Frituras        20.00      0       
+101      Coca Cola            Bebida                         Bebida          20.00      10      
