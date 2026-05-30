@@ -3,7 +3,7 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class MainAbarrotes {
+public class mainAbarrotes {
 
     public static void menuProd() {
         System.out.println("\n--- Menú Productos ---");
@@ -18,9 +18,7 @@ public class MainAbarrotes {
         System.out.println("\n--- Menú Facturas ---");
         System.out.println("1. Crear factura");
         System.out.println("2. Mostrar facturas");
-        System.out.println("3. Eliminar factura");
-        System.out.println("4. Actualizar factura");
-        System.out.println("5. Volver al menú principal");
+        System.out.println("3. Volver al menú principal");
     }
 
     public static void menuClientes() {
@@ -61,6 +59,8 @@ public class MainAbarrotes {
         Producto prod = new Producto();
         Cliente clie = new Cliente();
         Empleado emp = new Empleado();
+        Venta venta = new Venta();
+        Tienda tienda = new Tienda("Abarrotes Don Pepe", "Sucursal Centro", "Av. Principal #123");
 
         do {
             mainMenu();
@@ -210,19 +210,15 @@ public class MainAbarrotes {
 
                         switch (opcSub) {
                             case 1:
-                                System.out.println("-> Agregar factura");
+                                venta = new Venta();
+                                venta.crearFactura(tienda.getNombre());
                                 break;
                             case 2:
-                                System.out.println("-> Mostrar facturas");
+                                venta = new Venta();
+                                venta.mostrarFacturas();
                                 break;
                             case 3:
-                                System.out.println("-> Eliminar facturas");
-                                break;
-                            case 4:
-                                System.out.println("-> Actualizar facturas");
-                                break;
-                            case 5:
-                                System.out.println("-> Volviendo al menú principal...");
+                                System.out.println("Volviendo al menú principal...");
                                 break;
                             default:
                                 System.out.println("Opción no válida. Vuelva a intentarlo.");
