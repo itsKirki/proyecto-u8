@@ -52,8 +52,9 @@ public class MainAbarrotes {
 
     public static void main(String[] args) {
         Scanner lee = new Scanner(System.in);
-        int opc = 0, opcSub = 0;
-        String rutaArchivo = "data/productos.txt",linea = "";
+        int opc = 0, opcSub = 0, s = 0, reintentar = 0;
+        double p = 0.0;
+        String linea = "", eliminar = "", n = null, d = null, c = null, codigoActualizar = null;
         boolean pass = false;
         GestionarArchivos gestor = new GestionarArchivos();
         Producto prod = new Producto();
@@ -73,6 +74,7 @@ public class MainAbarrotes {
             } while (!pass);
 
             switch (opc) {
+
                 //Opcion producto
                 case 1:
                     do {
@@ -88,10 +90,10 @@ public class MainAbarrotes {
                                 pass = false;
                             }
                         } while (!pass);
-                        
+
                         switch (opcSub) {
                             case 1:
-                                gestor.abrirArchivo(rutaArchivo, "escribir");
+                                gestor.abrirArchivo("data/productos.txt", "escribir");
                                 prod = new Producto();
                                 System.out.println("--- RESGISTRO DE NUEVO PRODUCTO ---");
                                 prod.agregarProducto();
@@ -100,20 +102,85 @@ public class MainAbarrotes {
                                 gestor.cerrarArchivo();
                                 break;
                             case 2:
-                                gestor.abrirArchivo(rutaArchivo, "leer");
+                                gestor.abrirArchivo("data/productos.txt", "leer");
                                 prod = new Producto();
                                 System.out.printf("%-8s|%-20s|%-30s|%-15s|%-10s|%-8s%n", "Código", "Nombre", "Descripción", "Categoría", "Precio", "Stock");
                                 gestor.imprimirArchivo();
                                 gestor.cerrarArchivo();
                                 break;
                             case 3:
-                                System.out.println("-> Eliminar productos");
+                                System.out.println("Escriba el código del producto que desea eliminar:");
+                                eliminar = lee.nextLine();
+                                gestor.borrarLinea("data/productos.txt", eliminar);
                                 break;
                             case 4:
-                                System.out.println("-> Actualizar productos");
+                                lee.nextLine();
+                                System.out.println("Escriba el nuevo nombre del producto:");
+                                n = lee.nextLine();
+                                System.out.println("Escriba la nueva descripción del producto:");
+                                d = lee.nextLine();
+                                System.out.println("Escriba la nueva categoría del producto:");
+                                c = lee.nextLine();
+                                pass = false;
+
+                                do {
+                                    System.out.println("Escriba el nuevo precio del producto:");
+                                    try {
+                                        p = lee.nextDouble();
+                                        if (p <= 0) {
+                                            System.err.println("Error: El precio debe ser mayor a 0.");
+                                        } else {
+                                            pass = true;
+                                        }
+                                    } catch (InputMismatchException e) {
+                                        System.out.println("Error: Precio debe ser un número.");
+                                        lee.nextLine();
+                                    }
+                                } while (!pass);
+
+                                pass = false;
+                                do {
+                                    System.out.println("Escriba el nuevo stock del producto:");
+                                    try {
+                                        s = lee.nextInt();
+                                        if (s < 0) {
+                                            System.err.println("Error: El stock debe ser mayor a 0.");
+                                        } else {
+                                            pass = true;
+                                        }
+                                    } catch (InputMismatchException e) {
+                                        System.out.println("Error: Stock debe ser un número.");
+                                        lee.nextLine();
+                                    }
+                                } while (!pass);
+
+                                do {
+                                    lee.nextLine();
+                                    System.out.println("Escriba el código del producto que desea actualizar:");
+                                    codigoActualizar = lee.nextLine();
+                                    boolean actualizado = gestor.actualizarLinea(
+                                            "data/productos.txt",
+                                            codigoActualizar,
+                                            String.format(
+                                                    "%-20s|%-30s|%-15s|%-10.2f|%-8d",
+                                                    n, d, c, p, s
+                                            )
+                                    );
+
+                                    if (actualizado) {
+                                        System.out.println("Producto actualizado exitosamente.");
+                                        reintentar = 2;
+                                    } else {
+                                        System.out.println("No se encontró el producto con el código especificado.");
+                                        System.out.println("Deseas volver a intentar? 1) Sí 2) No");
+                                        reintentar = lee.nextInt();
+                                    }
+                                } while (reintentar != 2);
+                                reintentar = 0;
+
                                 break;
                             case 5:
-                                System.out.println("-> Volviendo al menú principal...");
+                                System.out.println("Volviendo al menú principal...");
                                 break;
                             default:
                                 System.out.println("Opción no válida. Vuelva a intentarlo.");
