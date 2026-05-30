@@ -266,9 +266,7 @@ public class Venta {
         }
     }
 
-    /**
-     * Lee e imprime todas las facturas almacenadas en data/facturas.txt.
-     */
+    //Lee e imprime todas las facturas almacenadas en data/facturas.txt
     public void mostrarFacturas() {
         java.io.File archivo = new java.io.File(RUTA_FACTURAS);
 
