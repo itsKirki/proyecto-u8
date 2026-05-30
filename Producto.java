@@ -132,11 +132,11 @@ public class Producto {
 
     public String formato() {
         return String.format("%-8d|%-20s|%-30s|%-15s|%-10.2f|%-8d", 
-                this.codigo, 
-                this.nombre, 
-                this.descripcion, 
-                this.categoria, 
-                this.precio, 
-                this.stock);
+                this.getCodigo(), 
+                this.getNombre(), 
+                this.getDescripcion(), 
+                this.getCategoria(), 
+                this.getPrecio(), 
+                this.getStock());
     }
 }

@@ -1,4 +1,5 @@
 
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -52,12 +53,14 @@ public class MainAbarrotes {
 
     public static void main(String[] args) {
         Scanner lee = new Scanner(System.in);
-        int opc = 0, opcSub = 0, s = 0, reintentar = 0;
-        double p = 0.0;
-        String linea = "", eliminar = "", n = null, d = null, c = null, codigoActualizar = null;
+        int opc = 0, opcSub = 0, s = 0, reintentar = 0, t = 0;
+        double p = 0.0, sa = 0.0;
+        String linea = "", eliminar = "", n = null, d = null, c = null, codigoActualizar = null, e = null, r = null, tc = null, tu = null, pu = null;
         boolean pass = false;
         GestionarArchivos gestor = new GestionarArchivos();
         Producto prod = new Producto();
+        Cliente clie = new Cliente();
+        Empleado emp = new Empleado();
 
         do {
             mainMenu();
@@ -66,7 +69,7 @@ public class MainAbarrotes {
                 try {
                     opc = lee.nextInt();
                     pass = true;
-                } catch (InputMismatchException e) {
+                } catch (InputMismatchException exc) {
                     System.out.println("Opción no válida. Vuelva a intentarlo.");
                     lee.nextLine();
                     pass = false;
@@ -84,7 +87,7 @@ public class MainAbarrotes {
                             try {
                                 opcSub = lee.nextInt();
                                 pass = true;
-                            } catch (InputMismatchException e) {
+                            } catch (InputMismatchException exc) {
                                 System.out.println("Opción no válida. Vuelva a intentarlo.");
                                 lee.nextLine();
                                 pass = false;
@@ -132,7 +135,7 @@ public class MainAbarrotes {
                                         } else {
                                             pass = true;
                                         }
-                                    } catch (InputMismatchException e) {
+                                    } catch (InputMismatchException exc) {
                                         System.out.println("Error: Precio debe ser un número.");
                                         lee.nextLine();
                                     }
@@ -148,14 +151,14 @@ public class MainAbarrotes {
                                         } else {
                                             pass = true;
                                         }
-                                    } catch (InputMismatchException e) {
+                                    } catch (InputMismatchException exc) {
                                         System.out.println("Error: Stock debe ser un número.");
                                         lee.nextLine();
                                     }
                                 } while (!pass);
+                                lee.nextLine();
 
                                 do {
-                                    lee.nextLine();
                                     System.out.println("Escriba el código del producto que desea actualizar:");
                                     codigoActualizar = lee.nextLine();
                                     boolean actualizado = gestor.actualizarLinea(
@@ -171,9 +174,9 @@ public class MainAbarrotes {
                                         System.out.println("Producto actualizado exitosamente.");
                                         reintentar = 2;
                                     } else {
-                                        System.out.println("No se encontró el producto con el código especificado.");
                                         System.out.println("Deseas volver a intentar? 1) Sí 2) No");
                                         reintentar = lee.nextInt();
+                                        lee.nextLine();
                                     }
                                 } while (reintentar != 2);
                                 reintentar = 0;
@@ -198,7 +201,7 @@ public class MainAbarrotes {
                             try {
                                 opcSub = lee.nextInt();
                                 pass = true;
-                            } catch (InputMismatchException e) {
+                            } catch (InputMismatchException exc) {
                                 System.out.println("Opción no válida. Vuelva a intentarlo.");
                                 lee.nextLine();
                                 pass = false;
@@ -237,7 +240,7 @@ public class MainAbarrotes {
                             try {
                                 opcSub = lee.nextInt();
                                 pass = true;
-                            } catch (InputMismatchException e) {
+                            } catch (InputMismatchException exc) {
                                 System.out.println("Opción no válida. Vuelva a intentarlo.");
                                 lee.nextLine();
                                 pass = false;
@@ -246,19 +249,102 @@ public class MainAbarrotes {
 
                         switch (opcSub) {
                             case 1:
-                                System.out.println("-> Agregar cliente");
+                                gestor.abrirArchivo("data/clientes.txt", "escribir");
+                                clie = new Cliente();
+                                System.out.println("--- RESGISTRO DE NUEVO CLIENTE ---");
+                                clie.agregarCliente();
+                                linea = clie.formato();
+                                gestor.agregarLinea(linea);
+                                gestor.cerrarArchivo();
                                 break;
                             case 2:
-                                System.out.println("-> Mostrar clientes");
+                                gestor.abrirArchivo("data/clientes.txt", "leer");
+                                clie = new Cliente();
+                                System.out.printf("%-8s|%-20s|%-15s|%-25s|%-10s|%-15s|%-30s|%-15s\n", "Código", "Nombre", "Teléfono", "Email", "Puntos", "RFC", "Fecha de Registro", "Tipo de Cliente");
+                                gestor.imprimirArchivo();
+                                gestor.imprimirArchivo();
+                                gestor.cerrarArchivo();
                                 break;
                             case 3:
-                                System.out.println("-> Eliminar clientes");
+                                lee.nextLine();
+                                System.out.println("Escriba el código del cliente que desea eliminar:");
+                                eliminar = lee.nextLine();
+                                gestor.borrarLinea("data/clientes.txt", eliminar);
                                 break;
                             case 4:
-                                System.out.println("-> Actualizar clientes");
+                                lee.nextLine();
+                                System.out.println("Escriba el nuevo nombre del cliente:");
+                                n = lee.nextLine();
+
+                                do {
+                                    pass = false;
+                                    System.out.println("Escriba el nuevo teléfono del cliente:");
+                                    try {
+                                        t = lee.nextInt();
+                                        if (t < 0) {
+                                            System.err.println("Error: El teléfono no puede ser negativo. Intente de nuevo.");
+                                        } else {
+                                            pass = true;
+                                        }
+                                    } catch (InputMismatchException ex) {
+                                        System.out.println("Entrada inválida. Por favor, ingrese un número válido para el teléfono.");
+                                        lee.nextLine();
+                                    }
+                                } while (!pass);
+                                lee.nextLine();
+
+                                System.out.println("Escriba el nuevo email del cliente:");
+                                e = lee.nextLine();
+
+                                do {
+                                    pass = false;
+                                    System.out.println("Escriba los nuevos puntos de fidelidad del cliente:");
+                                    try {
+                                        p = lee.nextInt();
+                                        if (p < 0) {
+                                            System.err.println("Error: Los puntos de fidelidad no pueden ser negativos. Intente de nuevo.");
+                                        } else {
+                                            pass = true;
+                                        }
+                                    } catch (InputMismatchException ex) {
+                                        System.out.println("Entrada inválida. Por favor, ingrese un número válido para los puntos de fidelidad.");
+                                        lee.nextLine();
+                                    }
+                                } while (!pass);
+                                lee.nextLine();
+
+                                System.out.println("Escriba el nuevo RFC de facturación del cliente:");
+                                r = lee.nextLine();
+
+                                System.out.println("Escriba el nuevo tipo de cliente (Regular, Premium, VIP):");
+                                tc = lee.nextLine();
+
+                                do {
+                                    System.out.println("Escriba el código del cliente que desea actualizar:");
+                                    codigoActualizar = lee.nextLine();
+                                    boolean actualizado = gestor.actualizarLinea(
+                                            "data/clientes.txt",
+                                            codigoActualizar,
+                                            String.format(
+                                                    "%-20s|%-15d|%-25s|%-10d|%-15s|%-30s|%-15s", n, (int) t, e, (int) p, r, new Date().toString(), tc
+                                            )
+                                    );
+
+                                    if (actualizado) {
+                                        System.out.println("Cliente actualizado exitosamente.");
+                                        reintentar = 2;
+                                    } else {
+                                        System.out.println("No se encontró el cliente con el código especificado.");
+                                        System.out.println("Deseas volver a intentar? 1) Sí 2) No");
+                                        reintentar = lee.nextInt();
+                                        lee.nextLine();
+                                    }
+                                } while (reintentar != 2);
+                                reintentar = 0;
+
                                 break;
                             case 5:
-                                System.out.println("-> Volviendo al menú principal...");
+                                System.out.println("Volviendo al menú principal...");
                                 break;
                             default:
                                 System.out.println("Opción no válida. Vuelva a intentarlo.");
@@ -276,7 +362,7 @@ public class MainAbarrotes {
                             try {
                                 opcSub = lee.nextInt();
                                 pass = true;
-                            } catch (InputMismatchException e) {
+                            } catch (InputMismatchException exc) {
                                 System.out.println("Opción no válida. Vuelva a intentarlo.");
                                 lee.nextLine();
                                 pass = false;
@@ -285,16 +371,115 @@ public class MainAbarrotes {
 
                         switch (opcSub) {
                             case 1:
-                                System.out.println("-> Agregar empleado");
+                                gestor.abrirArchivo("data/empleados.txt", "escribir");
+                                emp = new Empleado();
+                                System.out.println("--- RESGISTRO DE NUEVO EMPLEADO ---");
+                                emp.agregarEmpleado();
+                                linea = emp.formato();
+                                gestor.agregarLinea(linea);
+                                gestor.cerrarArchivo();
                                 break;
                             case 2:
-                                System.out.println("-> Mostrar empleados");
+                                gestor.abrirArchivo("data/empleados.txt", "leer");
+                                emp = new Empleado();
+                                System.out.printf("%-8s|%-20s|%-15s|%-25s|%-15s|%-10s|%-12s|%-20s\n",
+                                        "Código",
+                                        "Nombre",
+                                        "Teléfono",
+                                        "Email",
+                                        "RFC",
+                                        "Turno",
+                                        "Salario",
+                                        "Puesto");
+                                gestor.imprimirArchivo();
+                                gestor.cerrarArchivo();
                                 break;
                             case 3:
-                                System.out.println("-> Eliminar empleados");
+                                lee.nextLine();
+                                System.out.println("Escriba el código del empleado que desea eliminar:");
+                                eliminar = lee.nextLine();
+                                gestor.borrarLinea("data/empleados.txt", eliminar);
                                 break;
                             case 4:
-                                System.out.println("-> Actualizar empleados");
+                                lee.nextLine();
+                                System.out.println("Escriba el nuevo nombre del empleado:");
+                                n = lee.nextLine();
+
+                                do {
+                                    pass = false;
+                                    System.out.println("Escriba el nuevo teléfono del empleado:");
+                                    try {
+                                        t = lee.nextInt();
+                                        if (t < 0) {
+                                            System.err.println("Error: El teléfono no puede ser negativo. Intente de nuevo.");
+                                        } else {
+                                            pass = true;
+                                        }
+                                    } catch (InputMismatchException ex) {
+                                        System.out.println("Entrada inválida. Por favor, ingrese un número válido para el teléfono.");
+                                        lee.nextLine();
+                                    }
+                                } while (!pass);
+                                lee.nextLine();
+
+                                System.out.println("Escriba el nuevo email del empleado:");
+                                e = lee.nextLine();
+
+                                System.out.println("Escriba el nuevo RFC del empleado:");
+                                r = lee.nextLine();
+
+                                System.out.println("Escriba el nuevo turno del empleado:");
+                                tu = lee.nextLine();
+
+                                do {
+                                    pass = false;
+                                    System.out.println("Escriba el nuevo salario del empleado:");
+                                    try {
+                                        sa = lee.nextDouble();
+                                        if (sa < 0) {
+                                            System.err.println("Error: El salario no puede ser negativo. Intente de nuevo.");
+                                        } else {
+                                            pass = true;
+                                        }
+                                    } catch (InputMismatchException ex) {
+                                        System.out.println("Entrada inválida. Por favor, ingrese un número válido para el salario.");
+                                        lee.nextLine();
+                                    }
+                                } while (!pass);
+                                lee.nextLine();
+
+                                System.out.println("Escriba el nuevo puesto del empleado:");
+                                pu = lee.nextLine();
+
+                                do {
+                                    System.out.println("Escriba el código del empleado que desea actualizar:");
+                                    codigoActualizar = lee.nextLine();
+                                    boolean actualizado = gestor.actualizarLinea(
+                                            "data/empleados.txt",
+                                            codigoActualizar,
+                                            String.format(
+                                                    "%-20s|%-15d|%-25s|%-15s|%-10s|%-12.2f|%-20s",
+                                                    n,
+                                                    (long) t,
+                                                    e,
+                                                    r,
+                                                    tu,
+                                                    sa,
+                                                    pu 
+                                            )
+                                    );
+
+                                    if (actualizado) {
+                                        System.out.println("Empleado actualizado exitosamente.");
+                                        reintentar = 2;
+                                    } else {
+                                        System.out.println("No se encontró el empleado con el código especificado.");
+                                        System.out.println("Deseas volver a intentar? 1) Sí 2) No");
+                                        reintentar = lee.nextInt();
+                                        lee.nextLine();
+                                    }
+                                } while (reintentar != 2);
+                                reintentar = 0;
                                 break;
                             case 5:
                                 System.out.println("-> Volviendo al menú principal...");
