@@ -60,6 +60,7 @@ public class GestionarArchivos {
 
             while ((linea = bufferedReader.readLine()) != null) {
                 String[] partes = linea.split("\\|");
+                if (partes.length < 2) partes = linea.trim().split("\\s{2,}");
                 if (partes.length > 0 && partes[0].trim().equals(lineaAEliminar.trim())) {
                     encontrado = true;
                     continue;
@@ -104,6 +105,7 @@ public class GestionarArchivos {
 
             while ((linea = bufferedReader.readLine()) != null) {
                 String[] partes = linea.split("\\|");
+                if (partes.length < 2) partes = linea.trim().split("\\s{2,}");
                 if (partes.length > 0 && partes[0].trim().equals(lineaAActualizar.trim())) {
                     bufferedWriter.write(String.format("%-8s", partes[0].trim()) + "|" + nuevaLinea);
                     encontrado = true;

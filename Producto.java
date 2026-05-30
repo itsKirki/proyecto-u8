@@ -149,6 +149,7 @@ public class Producto {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split("\\|");
+                if (partes.length < 2) partes = linea.trim().split("\\s{2,}");
                 // Formato: código|nombre|descripción|categoría|precio|stock
                 if (partes.length >= 6) {
                     String nombreArchivo = partes[1].trim();

@@ -211,7 +211,8 @@ public class mainAbarrotes {
                         switch (opcSub) {
                             case 1:
                                 venta = new Venta();
-                                venta.crearFactura(tienda.getNombre());
+                                lee.nextLine(); // consumir \n pendiente del nextInt()
+                                venta.crearFactura(tienda.getNombre(), lee);
                                 break;
                             case 2:
                                 venta = new Venta();
