@@ -1,4 +1,7 @@
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -39,6 +42,13 @@ public class mainAbarrotes {
         System.out.println("5. Volver al menú principal");
     }
 
+    public static void menuTienda() {
+        System.out.println("\n--- Menú Tienda ---");
+        System.out.println("1. Mostrar información de la tienda");
+        System.out.println("2. Actualizar información de la tienda");
+        System.out.println("3. Volver al menú principal");
+    }
+
     public static void mainMenu() {
         System.out.println("\n------------ Bienvenido al sistema de gestión de abarrotes ------------");
         System.out.println("Seleccione una opción:");
@@ -46,21 +56,38 @@ public class mainAbarrotes {
         System.out.println("2. Factura");
         System.out.println("3. Clientes");
         System.out.println("4. Empleados");
-        System.out.println("5. Salir");
+        System.out.println("5. Tienda");
+        System.out.println("6. Salir");
     }
 
     public static void main(String[] args) {
         Scanner lee = new Scanner(System.in);
         int opc = 0, opcSub = 0, s = 0, reintentar = 0, t = 0;
         double p = 0.0, sa = 0.0;
-        String linea = "", eliminar = "", n = null, d = null, c = null, codigoActualizar = null, e = null, r = null, tc = null, tu = null, pu = null;
+        String linea = "", eliminar = "", n = null, d = null, c = null, codigoActualizar = null, e = null, r = null, tc = null, tu = null, pu = null, su = null;
         boolean pass = false;
         GestionarArchivos gestor = new GestionarArchivos();
         Producto prod = new Producto();
         Cliente clie = new Cliente();
         Empleado emp = new Empleado();
         Venta venta = new Venta();
+
         Tienda tienda = new Tienda("Abarrotes Don Pepe", "Sucursal Centro", "Av. Principal #123");
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("data/tienda.txt"));
+            String lineaArchivo = null;
+            if ((lineaArchivo = br.readLine()) != null) {
+                String[] partes = lineaArchivo.split("\\|");
+                if (partes.length >= 3) {
+                    tienda.setNombre(partes[0].trim());
+                    tienda.setSucursal(partes[1].trim());
+                    tienda.setDireccion(partes[2].trim());
+                }
+            }
+            br.close();
+        } catch (IOException ex) {
+            System.out.println("Nota: No se encontró información previa de la tienda. Se usarán valores predeterminados.");
+        }
 
         do {
             mainMenu();
@@ -462,7 +489,7 @@ public class mainAbarrotes {
                                                     r,
                                                     tu,
                                                     sa,
-                                                    pu 
+                                                    pu
                                             )
                                     );
 
@@ -488,8 +515,69 @@ public class mainAbarrotes {
                     } while (opcSub != 5);
                     break;
 
-                //Salida
                 case 5:
+                    do {
+                        menuTienda();
+                        //Verificar que la entrada sea un número entero válido
+                        do {
+                            try {
+                                opcSub = lee.nextInt();
+                                pass = true;
+                            } catch (InputMismatchException exc) {
+                                System.out.println("Opción no válida. Vuelva a intentarlo.");
+                                lee.nextLine();
+                                pass = false;
+                            }
+                        } while (!pass);
+
+                        switch (opcSub) {
+                            case 1:
+                                gestor.abrirArchivo("data/tienda.txt", "leer");
+                                prod = new Producto();
+                                System.out.printf("%-16s|%-20s|%-30s%n", "Nombre", "Sucursal", "Dirección");
+                                gestor.imprimirArchivo();
+                                gestor.cerrarArchivo();
+                                break;
+                            case 2:
+                                lee.nextLine();
+                                System.out.println("Escriba el nuevo nombre de la tienda:");
+                                n = lee.nextLine();
+
+                                System.out.println("Escriba la nueva sucursal de la tienda:");
+                                su = lee.nextLine();
+
+                                System.out.println("Escriba la nueva dirección de la tienda:");
+                                d = lee.nextLine();
+
+                                tienda.setNombre(n);
+                                tienda.setSucursal(su);
+                                tienda.setDireccion(d);
+
+                                try {
+                                    java.io.FileWriter fw = new java.io.FileWriter("data/tienda.txt", false);
+                                    java.io.PrintWriter pw = new java.io.PrintWriter(fw);
+
+                                    pw.printf("%-16s|%-20s|%-30s|%n", tienda.getNombre(), tienda.getSucursal(), tienda.getDireccion());
+                                    pw.close();
+
+                                    System.out.println("¡El archivo ha sido actualizado correctamente!");
+
+                                } catch (java.io.IOException ex) {
+                                    System.out.println("Error al intentar actualizar el archivo: " + ex.getMessage());
+                                }
+                                break;
+                            case 3:
+                                System.out.println("Volviendo al menú principal...");
+                                break;
+                            default:
+                                System.out.println("Opción no válida. Vuelva a intentarlo.");
+                                break;
+                        }
+                    } while (opcSub != 3);
+                    break;
+
+                //Salida
+                case 6:
                     System.out.println("Gracias por usar el sistema de gestión de abarrotes. ¡Hasta luego!");
                     break;
 
@@ -497,7 +585,7 @@ public class mainAbarrotes {
                     System.out.println("Opción no válida. Vuelva a intentarlo.");
                     break;
             }
-        } while (opc != 5);
+        } while (opc != 6);
         lee.close();
     }
 }
